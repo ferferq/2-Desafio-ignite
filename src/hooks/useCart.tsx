@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
@@ -34,9 +34,19 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return [];
   });
 
-  /*useEffect(()=> {
-    localStorage.setItem('@RocketShoes:cart', cart.toString());
-  }, [cart])*/
+  const prevCartRef = useRef<Product[]>();
+  
+  useEffect(() => {
+    prevCartRef.current = cart;
+  })
+
+  const cartPreviousValue = prevCartRef.current ?? cart;
+
+  useEffect(()=> {
+    //localStorage.setItem('@RocketShoes:cart', cart.toString());
+    if (cartPreviousValue !== cart)
+    localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
+  }, [cart, cartPreviousValue]);
 
   const addProduct = async (productId: number) => {
     try {
@@ -67,7 +77,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       }
 
       setCart(newCart);
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
+     // localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
       /*
       await api.get('stock')
         .then((response) => {//setTransactions(response.data)
@@ -129,7 +139,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       if (bFind) {
         setCart(newCart);
-        localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
+     //   localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
       }
       else {
         throw Error();
@@ -171,12 +181,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         toast.error('Quantidade solicitada fora de estoque');
         return;
       }
-
-      if (productExists.amount > amount) productExists.amount--;
-      else productExists.amount++;
+      else productExists.amount = amount;
 
       setCart(newCart);
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
+     // localStorage.setItem('@RocketShoes:cart', JSON.stringify(newCart));
 
       /*await api.get('stock')
         .then((response) => {//setTransactions(response.data)
