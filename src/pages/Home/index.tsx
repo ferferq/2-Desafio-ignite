@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
 
 import { ProductList } from './styles';
@@ -56,7 +56,7 @@ const Home = (): JSX.Element => {
       {
         products.map(product => {
           return (<li key={product.id}>
-            <img src={product.image} title={product.title}/>
+            <img src={product.image} alt={product.title}/>
             <strong>{product.title}</strong>
             <span>{product.priceFormatted}</span>
             <button

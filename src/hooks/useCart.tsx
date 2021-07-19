@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
-import { Product, Stock } from '../types';
+import { Product } from '../types';
 
 interface CartProviderProps {
   children: ReactNode;
@@ -133,9 +133,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         if (product.id !== productId) {
           return product;
         }
-        else
-        bFind = true; 
+        else{
+          bFind = true; 
+          return false;
+        }
       });
+
+     
 
       if (bFind) {
         setCart(newCart);
